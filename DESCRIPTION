@@ -1,0 +1,29 @@
+Package: cepiigravity
+Title: The CEPII Gravity Database
+Version: 0.0.0.9000
+Authors@R: 
+    c(
+     person("Mauricio", "Vargas Sepulveda", , "hello+r@pacha.dev", 
+            role = c("aut", "cre"),
+            comment = c(ORCID = "0000-0003-1017-7574")),
+     person(family = "Centre d'études prospectives et d'informations
+            internationales (CEPII)",
+            role = "dtc")
+    )
+Description: The Gravity database aims at gathering in a single place a set of 
+    variables that could be useful to researchers or practitioners willing to 
+    understand the determinants of international trade. Each observation 
+    corresponds to a combination of exporter-importer-year (i.e. 
+    origin-destination-year), for which we provide trade flows, as well as 
+    geographic, cultural, trade facilitation and macroeconomic variables.
+License: CC0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Depends: 
+    R (>= 2.10)
+LazyData: false
+URL: https://pacha.dev/cepiigravity
+BugReports: https://github.com/pachamaltese/cepiigravity/issues
+Suggests: 
+    gravity
