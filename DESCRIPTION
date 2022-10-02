@@ -22,8 +22,18 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Depends: 
     R (>= 2.10)
-LazyData: false
+LazyData: true
 URL: https://pacha.dev/cepiigravity
 BugReports: https://github.com/pachamaltese/cepiigravity/issues
+Imports: 
+    DBI,
+    duckdb,
+    httr,
+    purrr,
+    cli,
+    crayon,
+    rstudioapi,
+    tools
 Suggests: 
     gravity
+    
