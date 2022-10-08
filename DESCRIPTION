@@ -24,7 +24,7 @@ Depends:
     R (>= 2.10)
 LazyData: true
 URL: https://pacha.dev/cepiigravity
-BugReports: https://github.com/pachamaltese/cepiigravity/issues
+BugReports: https://github.com/pachadotdev/cepiigravity/issues
 Imports: 
     DBI,
     duckdb,
