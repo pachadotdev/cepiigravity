@@ -15,7 +15,7 @@ language or a colonial relationship, and others.
 
 ```
 # install.packages("remotes")
-install_github("pachamaltese/cepiigravity")
+install_github("pachadotdev/cepiigravity")
 ```
 
 The main source to obtain the data in this package is:
