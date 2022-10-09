@@ -38,7 +38,7 @@ finp <- list.files("dev", pattern = "\\.dta", full.names = T)
 countries <- read_stata(finp[1]) %>%
   clean_names() %>%
   mutate(iso3 = tolower(iso3)) %>%
-  mutate(iso3 = ifelse(nchar(iso3) == 0L, NA, iso3))
+  mutate_if(is.character, function(x) ifelse(x == "", NA, x))
 
 unique(nchar(countries$iso3))
 
@@ -48,10 +48,7 @@ gravity <- read_stata(finp[2]) %>%
     iso3_o = tolower(iso3_o),
     iso3_d = tolower(iso3_d)
   ) %>%
-  mutate(
-    iso3_o = ifelse(nchar(iso3_o) == 0L, NA, iso3_o),
-    iso3_d = ifelse(nchar(iso3_d) == 0L, NA, iso3_d)
-  )
+  mutate_if(is.character, function(x) ifelse(x == "", NA, x))
 
 unique(nchar(gravity$iso3_o))
 unique(nchar(gravity$iso3_d))
@@ -74,6 +71,7 @@ countries_desc <- tibble(
 
 attr(gravity[[2]], "label") <- "Origin ISO3 alphabetic"
 attr(gravity[[3]], "label") <- "Destination ISO3 alphabetic"
+attr(gravity[[34]], "label") <- "Common colonizer"
 
 gravity_desc <- tibble(
   variable = colnames(gravity),
@@ -93,6 +91,34 @@ knitr::kable(gravity_desc)
 
 # export ----
 
-usethis::use_data(countries, compress = "xz", overwrite = T)
+# usethis::use_data(countries, compress = "xz", overwrite = T)
+# usethis::use_data(gravity, compress = "xz", overwrite = T)
 
-usethis::use_data(gravity, compress = "xz", overwrite = T)
+fix_0s <- gravity_desc %>%
+  filter(grepl("1", description)) %>%
+  select(variable) %>%
+  pull()
+
+fix_0s <- fix_0s[!fix_0s %in% c("gdp_ppp_pwt_d", "col_dep_end_year",
+                                "gdp_ppp_pwt_o", "manuf_tradeflow_baci",
+                                "tradeflow_baci", "tradeflow_imf_d",
+                                "tradeflow_comtrade_d", "tradeflow_imf_o",
+                                "tradeflow_comtrade_o")]
+
+gravity_0s <- gravity %>%
+  select(fix_0s)
+
+col_names <- colnames(gravity)
+
+gravity <- gravity %>%
+  select(col_names[!col_names %in% fix_0s]) %>%
+  bind_cols(
+    gravity_0s %>%
+      mutate_if(is.numeric, function(x) as.integer(ifelse(is.na(x), 0L, x)))
+  )
+
+gravity <- gravity %>%
+  select(all_of(col_names))
+
+readr::write_tsv(gravity, "dev/gravity.tsv", na = "")
+readr::write_tsv(countries, "dev/countries.tsv", na = "")

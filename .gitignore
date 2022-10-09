@@ -1,2 +1,5 @@
 .Rproj.user
-dev/*.dta
+*.dta
+*.zip
+*.tsv
+.Rhistory

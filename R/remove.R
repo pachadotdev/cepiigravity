@@ -4,7 +4,7 @@
 #' all versions of the gravity database created with any DuckDB version.
 #'
 #' @param ask If so, a menu will be displayed to confirm the action to
-#' delete any existing census database. By default it is true.
+#' delete any existing gravity database. By default it is true.
 #' @return NULL
 #' @export
 #'
