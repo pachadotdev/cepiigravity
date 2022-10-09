@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' \dontrun{ gravity_delete() }
-gravity_delete <- function(ask = TRUE) {
+cepiigravity_delete <- function(ask = TRUE) {
   if (isTRUE(ask)) {
     answer <- utils::menu(c("Agree", "Cancel"),
                    title = "This will eliminate all gravity databases",
@@ -20,8 +20,8 @@ gravity_delete <- function(ask = TRUE) {
     }
   }
 
-  suppressWarnings(gravity_disconnect())
-  try(unlink(gravity_path(), recursive = TRUE))
-  update_gravity_pane()
+  suppressWarnings(cepiigravity_disconnect())
+  try(unlink(cepiigravity_path(), recursive = TRUE))
+  update_cepiigravity_pane()
   return(invisible())
 }

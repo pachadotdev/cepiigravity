@@ -14,24 +14,24 @@
 #'
 #' @examples
 #' \dontrun{ gravity_download() }
-gravity_download <- function(ver = NULL) {
+cepiigravity_download <- function(ver = NULL) {
   duckdb_version <- utils::packageVersion("duckdb")
   db_pattern <- paste0("v", gsub("\\.", "", duckdb_version), ".sql$")
 
-  duckdb_current_files <- list.files(gravity_path(), db_pattern, full.names = T)
+  duckdb_current_files <- list.files(cepiigravity_path(), db_pattern, full.names = T)
 
   if (length(duckdb_current_files) > 0 &&
       # avoid listing initial empty duckdb files
       all(file.size(duckdb_current_files) > 5000000000)) {
     msg("A gravity database already exists for your version of DuckDB.")
-    msg("If you really want to download the database again, run gravity_delete() and then download it again.")
+    msg("If you really want to download the database again, run cepiigravity_delete() and then download it again.")
     return(invisible())
   }
 
   msg("Downloading the database from GitHub...")
 
   destdir <- tempdir()
-  dir <- gravity_path()
+  dir <- cepiigravity_path()
 
   suppressWarnings(try(dir.create(dir, recursive = TRUE)))
 
@@ -41,10 +41,10 @@ gravity_download <- function(ver = NULL) {
   )
   ver <- attr(zfile, "ver")
 
-  suppressWarnings(try(gravity_disconnect()))
+  suppressWarnings(try(cepiigravity_disconnect()))
 
   msg("Deleting any old versions of the database...\n")
-  gravity_delete(ask = FALSE)
+  cepiigravity_delete(ask = FALSE)
 
   msg("Unzipping the necessary files...")
   utils::unzip(zfile, overwrite = TRUE, exdir = destdir)
@@ -60,7 +60,7 @@ gravity_download <- function(ver = NULL) {
 
     msg(sprintf("Creating %s table...", tout))
 
-    con <- gravity_connect()
+    con <- cepiigravity_connect()
 
     suppressMessages(
       DBI::dbExecute(
@@ -84,13 +84,13 @@ gravity_download <- function(ver = NULL) {
   metadata$duckdb_version <- as.character(metadata$duckdb_version)
   metadata$modification_date <- as.character(metadata$modification_date)
 
-  con <- gravity_connect()
+  con <- cepiigravity_connect()
   suppressMessages(DBI::dbWriteTable(con, "metadata", metadata, append = T, temporary = F))
   DBI::dbDisconnect(con, shutdown = TRUE)
 
-  update_gravity_pane()
-  gravity_pane()
-  gravity_status()
+  update_cepiigravity_pane()
+  cepiigravity_pane()
+  cepiigravity_status()
 }
 
 #' Download tsv files from GitHub

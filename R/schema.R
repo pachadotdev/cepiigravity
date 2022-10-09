@@ -1,7 +1,7 @@
 #' Crea el esquema SQL
 #' @noRd
 create_schema <- function() {
-  con <- gravity_connect()
+  con <- cepiigravity_connect()
 
   # comunas ----
 

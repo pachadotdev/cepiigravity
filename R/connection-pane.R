@@ -2,7 +2,7 @@ sql_action <- function() {
   if (requireNamespace("rstudioapi", quietly = TRUE) &&
       exists("documentNew", asNamespace("rstudioapi"))) {
     contents <- paste(
-      "-- !preview conn=cepiigravity::gravity_connect()",
+      "-- !preview conn=cepiigravity::cepiigravity_connect()",
       "",
       "SELECT * FROM gravity WHERE year = 2010",
       "",
@@ -17,7 +17,7 @@ sql_action <- function() {
   }
 }
 
-gravity_pane <- function() {
+cepiigravity_pane <- function() {
   observer <- getOption("connectionObserver")
   if (!is.null(observer) && interactive()) {
     observer$connectionOpened(
@@ -26,14 +26,14 @@ gravity_pane <- function() {
       displayName = "CEPII Gravity Tables",
       icon = system.file("img", "edit-sql.png", package = "cepiigravity"),
       connectCode = "cepiigravity::gravity_pane()",
-      disconnect = cepiigravity::gravity_disconnect,
+      disconnect = cepiigravity::cepiigravity_disconnect,
       listObjectTypes = function() {
         list(
           table = list(contains = "data")
         )
       },
       listObjects = function(type = "datasets") {
-        tbls <- DBI::dbListTables(gravity_connect())
+        tbls <- DBI::dbListTables(cepiigravity_connect())
         data.frame(
           name = tbls,
           type = rep("table", length(tbls)),
@@ -41,7 +41,7 @@ gravity_pane <- function() {
         )
       },
       listColumns = function(table) {
-        res <- DBI::dbGetQuery(gravity_connect(),
+        res <- DBI::dbGetQuery(cepiigravity_connect(),
                                paste("SELECT * FROM", table, "LIMIT 1"))
         data.frame(
           name = names(res), type = vapply(res, function(x) class(x)[1],
@@ -50,25 +50,25 @@ gravity_pane <- function() {
         )
       },
       previewObject = function(rowLimit, table) {
-        DBI::dbGetQuery(gravity_connect(),
+        DBI::dbGetQuery(cepiigravity_connect(),
                         paste("SELECT * FROM", table, "LIMIT", rowLimit))
       },
       actions = list(
         Status = list(
           icon = system.file("img", "edit-sql.png", package = "cepiigravity"),
-          callback = gravity_status
+          callback = cepiigravity_status
         ),
         SQL = list(
           icon = system.file("img", "edit-sql.png", package = "cepiigravity"),
           callback = sql_action
         )
       ),
-      connectionObject = gravity_connect()
+      connectionObject = cepiigravity_connect()
     )
   }
 }
 
-update_gravity_pane <- function() {
+update_cepiigravity_pane <- function() {
   observer <- getOption("connectionObserver")
   if (!is.null(observer)) {
     observer$connectionUpdated("CEPII Gravity", "cepiigravity", "")

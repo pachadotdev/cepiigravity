@@ -1,4 +1,4 @@
-gravity_path <- function() {
+cepiigravity_path <- function() {
   sys_gravity_path <- Sys.getenv("GRAVITY_DIR")
   sys_gravity_path <- gsub("\\\\", "/", sys_gravity_path)
   if (sys_gravity_path == "") {
@@ -8,8 +8,8 @@ gravity_path <- function() {
   }
 }
 
-gravity_check_status <- function() {
-  if (!gravity_status(FALSE)) {
+cepiigravity_check_status <- function() {
+  if (!cepiigravity_status(FALSE)) {
     stop("The gravity database is empty or damaged.
          Download it with gravity_download().")
   }
@@ -35,11 +35,11 @@ gravity_check_status <- function() {
 #'   'SELECT * FROM gravity WHERE year = 2010'
 #'  )
 #' }
-gravity_connect <- function(dir = gravity_path()) {
+cepiigravity_connect <- function(dir = cepiigravity_path()) {
   duckdb_version <- utils::packageVersion("duckdb")
   db_file <- paste0(dir, "/cepiigravity_duckdb_v", gsub("\\.", "", duckdb_version), ".sql")
 
-  db <- mget("gravity_connect", envir = gravity_cache, ifnotfound = NA)[[1]]
+  db <- mget("cepiigravity_connect", envir = cepiigravity_cache, ifnotfound = NA)[[1]]
 
   if (inherits(db, "DBIConnection")) {
     if (DBI::dbIsValid(db)) {
@@ -59,7 +59,7 @@ gravity_connect <- function(dir = gravity_path()) {
       stop(
         "The local gravity database is being used by another process. Try
         closing other R sessions or disconnecting the database using
-        gravity_disconnect() in the other sessions.",
+        cepiigravity_disconnect() in the other sessions.",
         call. = FALSE
       )
     } else {
@@ -69,7 +69,7 @@ gravity_connect <- function(dir = gravity_path()) {
   finally = NULL
   )
 
-  assign("gravity_connect", con, envir = gravity_cache)
+  assign("cepiigravity_connect", con, envir = cepiigravity_cache)
   con
 }
 
@@ -78,15 +78,15 @@ gravity_connect <- function(dir = gravity_path()) {
 #' An auxiliary function to disconnect from the database.
 #'
 #' @examples
-#' gravity_disconnect()
+#' cepiigravity_disconnect()
 #' @export
 #'
-gravity_disconnect <- function() {
-  gravity_disconnect_()
+cepiigravity_disconnect <- function() {
+  cepiigravity_disconnect_()
 }
 
-gravity_disconnect_ <- function(environment = gravity_cache) {
-  db <- mget("gravity_connect", envir = gravity_cache, ifnotfound = NA)[[1]]
+cepiigravity_disconnect_ <- function(environment = cepiigravity_cache) {
+  db <- mget("cepiigravity_connect", envir = cepiigravity_cache, ifnotfound = NA)[[1]]
   if (inherits(db, "DBIConnection")) {
     DBI::dbDisconnect(db, shutdown = TRUE)
   }
@@ -96,9 +96,9 @@ gravity_disconnect_ <- function(environment = gravity_cache) {
   }
 }
 
-gravity_status <- function(msg = TRUE) {
-  expected_tables <- sort(gravity_tables())
-  existing_tables <- sort(DBI::dbListTables(gravity_connect()))
+cepiigravity_status <- function(msg = TRUE) {
+  expected_tables <- sort(cepiigravity_tables())
+  existing_tables <- sort(DBI::dbListTables(cepiigravity_connect()))
 
   if (isTRUE(all.equal(expected_tables, existing_tables))) {
     status_msg <- crayon::green(paste(cli::symbol$tick,
@@ -113,9 +113,9 @@ gravity_status <- function(msg = TRUE) {
   invisible(out)
 }
 
-gravity_tables <- function() {
+cepiigravity_tables <- function() {
   c("countries", "gravity", "metadata")
 }
 
-gravity_cache <- new.env()
-reg.finalizer(gravity_cache, gravity_disconnect_, onexit = TRUE)
+cepiigravity_cache <- new.env()
+reg.finalizer(cepiigravity_cache, cepiigravity_disconnect_, onexit = TRUE)

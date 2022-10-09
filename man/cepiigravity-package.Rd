@@ -12,7 +12,7 @@ The Gravity database aims at gathering in a single place a set of variables that
 Useful links:
 \itemize{
   \item \url{https://pacha.dev/cepiigravity}
-  \item Report bugs at \url{https://github.com/pachamaltese/cepiigravity/issues}
+  \item Report bugs at \url{https://github.com/pachadotdev/cepiigravity/issues}
 }
 
 }
