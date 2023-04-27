@@ -3,6 +3,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
+**This repository is unmaintained, please see the new repository https://github.com/pachadotdev/gravitydatasets.**
+
 The goal of cepiigravity is to provide the same data from [Gravity](http://www.cepii.fr/CEPII/en/bdd_modele/bdd_modele_item.asp?id=8) 
 ready to be used in R (i.e. with the [gravity](https://pacha.dev/gravity) 
 package).
